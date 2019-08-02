@@ -1,0 +1,498 @@
+classdef Assignment_1 < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure                   matlab.ui.Figure
+        VphaseKVLabel              matlab.ui.control.Label
+        OperatingvoltageEditField  matlab.ui.control.NumericEditField
+        CalculateButton            matlab.ui.control.Button
+        NumberofUnitsButtonGroup   matlab.ui.container.ButtonGroup
+        ThreeUnits                 matlab.ui.control.RadioButton
+        FourUnits                  matlab.ui.control.RadioButton
+        FiveUnits                  matlab.ui.control.RadioButton
+        SixUnits                   matlab.ui.control.RadioButton
+        KLabel                     matlab.ui.control.Label
+        KEditField                 matlab.ui.control.NumericEditField
+        V1EditField                matlab.ui.control.NumericEditField
+        V2EditField                matlab.ui.control.NumericEditField
+        V3EditField                matlab.ui.control.NumericEditField
+        V4EditField                matlab.ui.control.NumericEditField
+        V5EditField                matlab.ui.control.NumericEditField
+        V6EditField                matlab.ui.control.NumericEditField
+        EfficiencyEditField        matlab.ui.control.NumericEditField
+        V1phaseKVLabel             matlab.ui.control.Label
+        V2phaseKVLabel             matlab.ui.control.Label
+        V3phaseKVLabel             matlab.ui.control.Label
+        V4phaseKVLabel             matlab.ui.control.Label
+        V5phaseKVLabel             matlab.ui.control.Label
+        V6phaseKVLabel             matlab.ui.control.Label
+        EfficiencyLabel            matlab.ui.control.Label
+        PlotButton                 matlab.ui.control.Button
+        UIAxes                     matlab.ui.control.UIAxes
+        UIAxes_2                   matlab.ui.control.UIAxes
+        ClearButton                matlab.ui.control.Button
+    end
+
+
+    methods (Access = private)
+    end
+
+    
+
+    methods (Access = private)
+
+        % Code that executes after component creation
+        function startupFcn(app)
+            app.V1EditField.Value = 0;
+            app.V2EditField.Value = 0;
+            app.V3EditField.Value = 0;
+            app.V4EditField.Value = 0;
+            app.V5EditField.Value = 0;
+            app.V6EditField.Value = 0;
+            app.EfficiencyEditField.Value = 0;
+
+        end
+
+        % Value changed function: KEditField
+        function KEditFieldValueChanged(app, event)
+            value = app.KEditField.Value;
+            
+        end
+
+        % Button pushed function: CalculateButton
+        function CalculateButtonPushed(app, event)
+         
+         % Calculate voltage distb
+            
+            V = (app.OperatingvoltageEditField.Value)  ;
+            K = app.KEditField.Value ;
+            
+         % For 3 insulator units
+            
+            if (app.ThreeUnits.Value)
+                       
+                V1 = (V) / (3 + 4*K + (K)^2 );
+                V2 = (V1) * (1+K);
+                V3 = (V1) * (1+3*K+(K)^2);
+                V4 = 0;
+                V5 = 0;
+                V6 = 0;
+                
+          % Calculate Efficiency
+
+                Efficiency = ((V) / (3*(V3)))*100;
+
+                
+             end
+             
+          % For 4 insulator units
+          
+             if (app.FourUnits.Value)
+                       
+                V1 = (V) / (4 + 10*K + 6*(K)^2 + (K)^3 );
+                V2 = (V1) * (1+K);
+                V3 = (V1) * (1+3*K+(K)^2);
+                V4 = (V1) * (1+6*K + 5*((K)^2)+((K)^3));
+                V5 = 0;
+                V6 = 0;
+                
+           % Calculate Efficiency
+
+                Efficiency = ((V) / (4*(V4)))*100;                 
+           end
+           
+          % For 5 insulator units
+          
+           if (app.FiveUnits.Value)
+                       
+                V1 = (V) / (5 + 20*K + 21*(K)^2 + 8*(K)^3 + (K)^4 );
+                V2 = (V1) * (1+K);
+                V3 = (V1) * (1+3*K+(K)^2);
+                V4 = (V1) * (1+6*K + 5*((K)^2)+((K)^3));
+                V5 = (V1) * (1+10*K+15*((K)^2)+7*((K)^3)+((K)^4));
+                V6 = 0;
+                
+            % Calculate Efficiency
+                
+                Efficiency = ((V) / (5*(V5)))*100;
+                
+                 
+           end
+           
+           % For 6 insulator units
+           
+           if (app.SixUnits.Value)
+                                       
+                V1 = (V) / (6 + 35*K + 56*(K)^2 + 36*(K)^3 + 10*(K)^4 + (K)^5 );
+                V2 = (V1) * (1+K);
+                V3 = (V1) * (1+3*K+(K)^2);
+                V4 = (V1) * (1+6*K + 5*((K)^2)+((K)^3));
+                V5 = (V1) * (1+10*K+15*((K)^2)+7*((K)^3)+((K)^4));
+                V6 = (V1) * (1+15*K+35*((K)^2)+28*((K)^3)+9*((K)^4)+((K)^5));
+                
+            % Calculate Efficiency
+
+                Efficiency = ((V) / (6*(V6)))*100; 
+                
+                 
+           end
+            
+           % Display Voltage distribution and efficiency
+           
+            app.V1EditField.Value = V1;
+            app.V2EditField.Value = V2;
+            app.V3EditField.Value = V3;
+            app.V4EditField.Value = V4;
+            app.V5EditField.Value = V5;
+            app.V6EditField.Value = V6;
+            app.EfficiencyEditField.Value = Efficiency;
+            
+            
+        
+        end
+
+        % Selection changed function: NumberofUnitsButtonGroup
+        function NumberofUnitsButtonGroupSelectionChanged(app, event)
+            selectedButton = app.NumberofUnitsButtonGroup.SelectedObject;
+            
+        end
+
+        % Value changed function: OperatingvoltageEditField
+        function OperatingvoltageEditFieldValueChanged(app, event)
+            value = app.OperatingvoltageEditField.Value;
+            
+        end
+
+        % Button pushed function: PlotButton
+        function PlotButtonPushed(app, event)
+                       
+            V = (app.OperatingvoltageEditField.Value)  ;
+            
+         % For 3 insulator units
+            
+            
+          % pre allocating and initializing variables 
+          K = linspace(0,1);
+
+          % For 3 insulator units
+            
+            if (app.ThreeUnits.Value)
+                       
+                V1 = ( V ) ./ ( 3 + 4 * K + (K).^ (2) );
+                V2 = ( (V) ./ ( 3 + 4 * K + (K).^ (2) ) ) .* ( 1+(K) );
+                V3 = ( (V) ./ ( 3 + 4 * K + (K).^ (2) ) ) .* ( 1+3*K+(K).^2 );
+
+                
+          % Calculate Efficiency
+
+                Efficiency = ( (V) ./ ( 3*(V3) ) );
+               
+            % Plot 
+            
+            hold(app.UIAxes,'on')
+            plot(app.UIAxes, K, V1);
+            plot(app.UIAxes, K, V2);
+            plot(app.UIAxes, K, V3);
+            hold(app.UIAxes,'off')
+ 
+            plot(app.UIAxes_2, Efficiency, K);
+            
+            end
+            
+             if (app.FourUnits.Value)
+                 
+                 
+                 
+                V1 = (V)  ./ (4 + 10*K + 6*(K).^2 + (K).^3 );
+                V2 = (V1) .* (1+K);
+                V3 = (V1) .* (1+3*K+(K).^2);
+                V4 = (V1) .* (1+6*K + 5*((K).^2)+((K).^3));
+                
+            % Calculate Efficiency
+
+                Efficiency = ( (V) ./ (4*(V4)));                 
+                
+
+                
+            % Plot 
+            
+            hold(app.UIAxes,'on')
+            plot(app.UIAxes, K, V1);
+            plot(app.UIAxes, K, V2);
+            plot(app.UIAxes, K, V3);
+            plot(app.UIAxes, K, V4);
+            hold(app.UIAxes,'off')
+
+            plot(app.UIAxes_2, K, Efficiency);
+            
+             end
+           
+          % For 5 insulator units
+          
+           if (app.FiveUnits.Value)
+                       
+                V1 = (V) ./ (6 + 35*K + 56*(K).^2 + 36*(K).^3 + 10*(K).^4 + (K).^5 );
+                V2 = (V1) .* (1+K);
+                V3 = (V1) .* (1+3*K+(K).^2);
+                V4 = (V1) .* (1+6*K + 5*((K).^2)+((K).^3));
+                V5 = (V1) .* (1+10*K+15*((K).^2)+7*((K).^3)+((K).^4));
+                
+            % Calculate Efficiency
+
+                Efficiency = ((V) ./ (5*(V5))) ; 
+                
+            % Plot 
+                      
+            hold(app.UIAxes,'on')
+            plot(app.UIAxes, K, V1);
+            plot(app.UIAxes, K, V2);
+            plot(app.UIAxes, K, V3);
+            plot(app.UIAxes, K, V4);
+            plot(app.UIAxes, K, V5);
+            hold(app.UIAxes,'off')
+
+            plot(app.UIAxes_2, Efficiency, K);
+      
+           end
+           
+           % For 6 insulator units
+           
+           if (app.SixUnits.Value)
+                                       
+                V1 = (V)  ./ (6 + 35*K + 56*(K).^2 + 36*(K).^3 + 10*(K).^4 + (K).^5 );
+                V2 = (V1) .* (1+K);
+                V3 = (V1) .* (1+3*K+(K).^2);
+                V4 = (V1) .* (1+6*K + 5*((K).^2)+((K).^3));
+                V5 = (V1) .* (1+10*K+15*((K).^2)+7*((K).^3)+((K).^4));
+                V6 = (V1) .* (1+15*K+35*((K).^2)+28*((K).^3)+9*((K).^4)+((K).^5));
+                
+            % Calculate Efficiency
+
+                Efficiency = ((V) ./ (6*(V6))) ; 
+                
+            % Plot 
+            
+            hold(app.UIAxes,'on')
+            plot(app.UIAxes, K, V1);
+            plot(app.UIAxes, K, V2);
+            plot(app.UIAxes, K, V3);
+            plot(app.UIAxes, K, V4);
+            plot(app.UIAxes, K, V5);
+            plot(app.UIAxes, K, V6);
+            hold(app.UIAxes,'off')
+
+            plot(app.UIAxes_2, Efficiency, K);
+    
+           end
+                      
+        end
+
+        % Button pushed function: ClearButton
+        function ClearButtonPushed(app, event)
+                        cla(app.UIAxes)
+                        cla(app.UIAxes_2)
+
+        end
+    end
+
+    % App initialization and construction
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Create UIFigure
+            app.UIFigure = uifigure;
+            app.UIFigure.Position = [100 100 890 600];
+            app.UIFigure.Name = 'UI Figure';
+
+            % Create VphaseKVLabel
+            app.VphaseKVLabel = uilabel(app.UIFigure);
+            app.VphaseKVLabel.HorizontalAlignment = 'right';
+            app.VphaseKVLabel.Position = [29 443 77 22];
+            app.VphaseKVLabel.Text = 'Vphase  (KV)';
+
+            % Create OperatingvoltageEditField
+            app.OperatingvoltageEditField = uieditfield(app.UIFigure, 'numeric');
+            app.OperatingvoltageEditField.ValueChangedFcn = createCallbackFcn(app, @OperatingvoltageEditFieldValueChanged, true);
+            app.OperatingvoltageEditField.Position = [134 443 180 22];
+
+            % Create CalculateButton
+            app.CalculateButton = uibutton(app.UIFigure, 'push');
+            app.CalculateButton.ButtonPushedFcn = createCallbackFcn(app, @CalculateButtonPushed, true);
+            app.CalculateButton.Position = [18 90 100 22];
+            app.CalculateButton.Text = 'Calculate';
+
+            % Create NumberofUnitsButtonGroup
+            app.NumberofUnitsButtonGroup = uibuttongroup(app.UIFigure);
+            app.NumberofUnitsButtonGroup.SelectionChangedFcn = createCallbackFcn(app, @NumberofUnitsButtonGroupSelectionChanged, true);
+            app.NumberofUnitsButtonGroup.Title = 'Number of units';
+            app.NumberofUnitsButtonGroup.Position = [110 220 123 163];
+
+            % Create ThreeUnits
+            app.ThreeUnits = uiradiobutton(app.NumberofUnitsButtonGroup);
+            app.ThreeUnits.Text = '3';
+            app.ThreeUnits.Position = [11 117 58 22];
+            app.ThreeUnits.Value = true;
+
+            % Create FourUnits
+            app.FourUnits = uiradiobutton(app.NumberofUnitsButtonGroup);
+            app.FourUnits.Text = '4';
+            app.FourUnits.Position = [11 85 65 22];
+
+            % Create FiveUnits
+            app.FiveUnits = uiradiobutton(app.NumberofUnitsButtonGroup);
+            app.FiveUnits.Text = '5';
+            app.FiveUnits.Position = [11 53 65 22];
+
+            % Create SixUnits
+            app.SixUnits = uiradiobutton(app.NumberofUnitsButtonGroup);
+            app.SixUnits.Text = '6';
+            app.SixUnits.Position = [11 22 58 22];
+
+            % Create KLabel
+            app.KLabel = uilabel(app.UIFigure);
+            app.KLabel.HorizontalAlignment = 'right';
+            app.KLabel.Position = [29 499 25 22];
+            app.KLabel.Text = 'K';
+
+            % Create KEditField
+            app.KEditField = uieditfield(app.UIFigure, 'numeric');
+            app.KEditField.ValueChangedFcn = createCallbackFcn(app, @KEditFieldValueChanged, true);
+            app.KEditField.Position = [134 499 180 22];
+
+            % Create V1EditField
+            app.V1EditField = uieditfield(app.UIFigure, 'numeric');
+            app.V1EditField.Position = [783 439 78 22];
+
+            % Create V2EditField
+            app.V2EditField = uieditfield(app.UIFigure, 'numeric');
+            app.V2EditField.Position = [783 393 78 22];
+
+            % Create V3EditField
+            app.V3EditField = uieditfield(app.UIFigure, 'numeric');
+            app.V3EditField.Position = [783 347 78 22];
+
+            % Create V4EditField
+            app.V4EditField = uieditfield(app.UIFigure, 'numeric');
+            app.V4EditField.Position = [783 303 78 22];
+
+            % Create V5EditField
+            app.V5EditField = uieditfield(app.UIFigure, 'numeric');
+            app.V5EditField.Position = [783 259 78 22];
+
+            % Create V6EditField
+            app.V6EditField = uieditfield(app.UIFigure, 'numeric');
+            app.V6EditField.Position = [783 216 78 22];
+
+            % Create EfficiencyEditField
+            app.EfficiencyEditField = uieditfield(app.UIFigure, 'numeric');
+            app.EfficiencyEditField.Position = [783 173 78 22];
+
+            % Create V1phaseKVLabel
+            app.V1phaseKVLabel = uilabel(app.UIFigure);
+            app.V1phaseKVLabel.HorizontalAlignment = 'right';
+            app.V1phaseKVLabel.Position = [666 439 91 22];
+            app.V1phaseKVLabel.Text = 'V1(phase)  (KV)';
+
+            % Create V2phaseKVLabel
+            app.V2phaseKVLabel = uilabel(app.UIFigure);
+            app.V2phaseKVLabel.HorizontalAlignment = 'right';
+            app.V2phaseKVLabel.Position = [666 393 88 22];
+            app.V2phaseKVLabel.Text = 'V2(phase) (KV)';
+
+            % Create V3phaseKVLabel
+            app.V3phaseKVLabel = uilabel(app.UIFigure);
+            app.V3phaseKVLabel.HorizontalAlignment = 'right';
+            app.V3phaseKVLabel.Position = [666 347 88 22];
+            app.V3phaseKVLabel.Text = 'V3(phase) (KV)';
+
+            % Create V4phaseKVLabel
+            app.V4phaseKVLabel = uilabel(app.UIFigure);
+            app.V4phaseKVLabel.HorizontalAlignment = 'right';
+            app.V4phaseKVLabel.Position = [666 303 88 22];
+            app.V4phaseKVLabel.Text = 'V4(phase) (KV)';
+
+            % Create V5phaseKVLabel
+            app.V5phaseKVLabel = uilabel(app.UIFigure);
+            app.V5phaseKVLabel.HorizontalAlignment = 'right';
+            app.V5phaseKVLabel.Position = [666 259 88 22];
+            app.V5phaseKVLabel.Text = 'V5(phase) (KV)';
+
+            % Create V6phaseKVLabel
+            app.V6phaseKVLabel = uilabel(app.UIFigure);
+            app.V6phaseKVLabel.HorizontalAlignment = 'right';
+            app.V6phaseKVLabel.Position = [666 216 88 22];
+            app.V6phaseKVLabel.Text = 'V6(phase) (KV)';
+
+            % Create EfficiencyLabel
+            app.EfficiencyLabel = uilabel(app.UIFigure);
+            app.EfficiencyLabel.HorizontalAlignment = 'right';
+            app.EfficiencyLabel.Position = [666 173 74 22];
+            app.EfficiencyLabel.Text = 'Efficiency  %';
+
+            % Create PlotButton
+            app.PlotButton = uibutton(app.UIFigure, 'push');
+            app.PlotButton.ButtonPushedFcn = createCallbackFcn(app, @PlotButtonPushed, true);
+            app.PlotButton.Position = [133 90 100 22];
+            app.PlotButton.Text = 'Plot';
+
+            % Create UIAxes
+            app.UIAxes = uiaxes(app.UIFigure);
+            title(app.UIAxes, 'Voltage Distribution')
+            xlabel(app.UIAxes, 'K')
+            ylabel(app.UIAxes, 'Y')
+            app.UIAxes.Box = 'on';
+            app.UIAxes.XTick = [];
+            app.UIAxes.YTick = [];
+            app.UIAxes.XGrid = 'on';
+            app.UIAxes.YGrid = 'on';
+            app.UIAxes.Position = [356 305 311 275];
+
+            % Create UIAxes_2
+            app.UIAxes_2 = uiaxes(app.UIFigure);
+            title(app.UIAxes_2, 'Efficiency')
+            xlabel(app.UIAxes_2, 'K')
+            ylabel(app.UIAxes_2, 'Y')
+            app.UIAxes_2.Box = 'on';
+            app.UIAxes_2.XTick = [];
+            app.UIAxes_2.YTick = [];
+            app.UIAxes_2.XGrid = 'on';
+            app.UIAxes_2.YGrid = 'on';
+            app.UIAxes_2.Position = [356 30 311 251];
+
+            % Create ClearButton
+            app.ClearButton = uibutton(app.UIFigure, 'push');
+            app.ClearButton.ButtonPushedFcn = createCallbackFcn(app, @ClearButtonPushed, true);
+            app.ClearButton.Position = [245 90 100 22];
+            app.ClearButton.Text = 'Clear';
+        end
+    end
+
+    methods (Access = public)
+
+        % Construct app
+        function app = Assignment_1
+
+            % Create and configure components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            % Execute the startup function
+            runStartupFcn(app, @startupFcn)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
